@@ -34,7 +34,7 @@ void CMatchCaptain::Init(int PlayersMin)
 
 				Player->ClearConditions(BIT_CONDITION_INMENU);
 
-				if (!Player->isBot())
+				if (!Player->IsBot())
 				{
 					PlayerCount += 1;
 				}
