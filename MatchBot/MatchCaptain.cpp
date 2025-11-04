@@ -43,7 +43,7 @@ void CMatchCaptain::Init(int PlayersMin)
 
 		if (PlayerCount >= 2)
 		{
-			Players = gMatchUtil.GetPlayers(false, false)
+			Players = gMatchUtil.GetPlayers(false, false);
 		}
 
 		auto User = g_engfuncs.pfnRandomLong(0, 1);
