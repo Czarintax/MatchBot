@@ -48,11 +48,11 @@ void CMatchCaptain::Init(int PlayersMin)
 
 		auto User = g_engfuncs.pfnRandomLong(0, 1);
 
-		auto Team = g_engfuncs.pfnRandomLong(1, 2);
+		auto Team = (TeamName)(g_engfuncs.pfnRandomLong(1, 2));
 		
 		this->SetCaptain(Players.at(User), Team);
 
-		this->SetCaptain(Players.at(User == 0 ? 1 : 0), (Team == 1) ? 2 : 1);
+		this->SetCaptain(Players.at(User == 0 ? 1 : 0), (Team == TERRORIST) ? CT : TERRORIST);
 
 		this->Menu(Players.at(User));
 
