@@ -20,6 +20,8 @@ void CMatchCaptain::Init(int PlayersMin)
 
 		g_engfuncs.pfnCvar_DirectSet(gMatchBot.m_AllowSpectators, "1");
 
+		auto PlayerCount = 0;
+
 		for (auto & Player : Players)
 		{
 			if (Player->m_iTeam != UNASSIGNED)
@@ -31,18 +33,28 @@ void CMatchCaptain::Init(int PlayersMin)
 				Player->ClearConditions(BIT_CONDITION_LEADER);
 
 				Player->ClearConditions(BIT_CONDITION_INMENU);
+
+				if (!Player->isBot())
+				{
+					PlayerCount += 1;
+				}
 			}
 		}
 
-		auto TeamA = (TeamName)RANDOM_LONG(1, 2);
+		if (PlayerCount >= 2)
+		{
+			Players = gMatchUtil.GetPlayers(false, false)
+		}
 
-		auto TeamB = (TeamA == CT) ? TERRORIST : CT;
+		auto User = g_engfuncs.pfnRandomLong(0, 1);
 
-		this->SetCaptain(Players[0], TeamA);
+		auto Team = g_engfuncs.pfnRandomLong(1, 2);
+		
+		this->SetCaptain(Players.at(User), Team);
 
-		this->SetCaptain(Players[1], TeamB);
+		this->SetCaptain(Players.at(User == 0 ? 1 : 0), (Team == 1) ? 2 : 1);
 
-		this->Menu(Players[(TeamA == TERRORIST) ? 0 : 1]);
+		this->Menu(Players.at(User));
 
 		gMatchTask.Create(TASK_VOTE_LIST, 0.5f, true, (void*)this->PlayerList, this->m_PlayersMin);
 	}
