@@ -112,7 +112,8 @@ bool CMatchCommand::ClientCommand(CBasePlayer* Player, const char* pcmd, const c
 	{
 	    if (parg1)
 	    {
-	        if (parg1[0u] == gMatchBot.m_AdminPrefix->string[0u] || parg1[0u] == gMatchBot.m_PlayerPrefix->string[0u])
+	        // Check if message starts with '/'
+	        if (parg1[0u] == '/')
 	        {
 	            auto pCmdArgs = g_engfuncs.pfnCmd_Args();
 	            
@@ -120,10 +121,9 @@ bool CMatchCommand::ClientCommand(CBasePlayer* Player, const char* pcmd, const c
 	            {
 	                if (pCmdArgs[0u] != '\0')
 	                {
-	                    // Skip the first character (the prefix)
+	                    // Skip the '/' prefix
 	                    const char* pCmdWithoutPrefix = pCmdArgs + 1;
 	                    
-	                    // Declare as array instead of string literal
 	                    char pCmdFormat[] = "%s\n";
 	                    g_engfuncs.pfnClientCommand(Player->edict(), pCmdFormat, pCmdWithoutPrefix);
 	                    
