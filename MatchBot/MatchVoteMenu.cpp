@@ -160,7 +160,7 @@ bool CMatchVoteMenu::VoteKick(CBasePlayer* Player)
 			gMatchMenu[Player->entindex()].Create(_T("Vote Kick:"), true, (void*)this->VoteKickHandle);
 
 			// Get players from player team
-			auto Players = gMatchUtil.GetPlayers(Player->m_iTeam, true);
+			auto Players = gMatchUtil.GetPlayers(Player->m_iTeam, false);
 
 			// If we have the needed players to vote kick
 			if (gMatchBot.m_PlayerVoteKick->value && (Players.size() >= (size_t)round(gMatchBot.m_PlayerVoteKick->value)))
@@ -294,7 +294,7 @@ bool CMatchVoteMenu::VoteMap(CBasePlayer* Player)
 		if (gMatchBot.GetState() != STATE_START)
 		{
 			// Get Players
-			auto Players = gMatchUtil.GetPlayers(true, true);
+			auto Players = gMatchUtil.GetPlayers(true, false);
 
 			// If player count match
 			if (gMatchBot.m_PlayerVoteMap->value && (Players.size() >= (size_t)round(gMatchBot.m_PlayerVoteMap->value)))
@@ -363,7 +363,7 @@ void CMatchVoteMenu::VoteMapHandle(int EntityIndex, P_MENU_ITEM Item)
 			gMatchVoteMenu.m_Votes[Player->entindex()].VoteMap[Item.Info] = true;
 
 			// Get Players
-			auto Players = gMatchUtil.GetPlayers(true, true);
+			auto Players = gMatchUtil.GetPlayers(true, false);
 
 			// Needed votes
 			auto VotesNeed = (static_cast<float>(Players.size()) * gMatchBot.m_VotePercent->value);
@@ -434,7 +434,7 @@ bool CMatchVoteMenu::VotePause(CBasePlayer* Player)
 			if ((gMatchBot.m_PauseTime->value > 0.0f) && (gMatchBot.m_PlayerVotePause->value > 0.0f))
 			{
 				// Get Players
-				auto Players = gMatchUtil.GetPlayers(Player->m_iTeam, true);
+				auto Players = gMatchUtil.GetPlayers(Player->m_iTeam, false);
 
 				// If player count match
 				if (gMatchBot.m_PlayerVotePause->value && (Players.size() >= (size_t)round(gMatchBot.m_PlayerVotePause->value)))
@@ -526,7 +526,7 @@ bool CMatchVoteMenu::VoteRestart(CBasePlayer* Player)
 	if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 	{
 		// Get Players
-		auto Players = gMatchUtil.GetPlayers(true, true);
+		auto Players = gMatchUtil.GetPlayers(true, false);
 
 		// If player count match
 		if (gMatchBot.m_PlayerVoteRestart->value && (Players.size() >= (size_t)round(gMatchBot.m_PlayerVoteRestart->value)))
@@ -623,7 +623,7 @@ bool CMatchVoteMenu::VoteSurrender(CBasePlayer* Player)
 			if (gMatchBot.m_PlayerVoteSurrender->value > 0.0f)
 			{
 				// Get Players
-				auto Players = gMatchUtil.GetPlayers(Player->m_iTeam, true);
+				auto Players = gMatchUtil.GetPlayers(Player->m_iTeam, false);
 
 				// If player count match
 				if (Players.size() >= static_cast<size_t>(gMatchBot.m_PlayerVoteSurrender->value))
@@ -707,7 +707,7 @@ bool CMatchVoteMenu::VoteStop(CBasePlayer* Player)
 	if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 	{
 		// Get Players
-		auto Players = gMatchUtil.GetPlayers(true, true);
+		auto Players = gMatchUtil.GetPlayers(true, false);
 
 		// If player count match
 		if (Players.size() > 0)
