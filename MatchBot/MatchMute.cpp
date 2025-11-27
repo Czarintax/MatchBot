@@ -12,7 +12,7 @@ void CMatchMute::Menu(CBasePlayer* Player)
 		{
 			gMatchMenu[EntityIndex].Create(_T("Mute Menu:"), true, (void*)this->MenuHandle);
 
-			auto Players = gMatchUtil.GetPlayers(false, true);
+			auto Players = gMatchUtil.GetPlayers(false, false);
 
 			for (auto const& Target : Players)
 			{
