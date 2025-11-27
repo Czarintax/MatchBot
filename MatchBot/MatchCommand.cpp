@@ -110,33 +110,19 @@ bool CMatchCommand::ClientCommand(CBasePlayer* Player, const char* pcmd, const c
 	// If player used say or say_team command
 	else if (Q_stricmp(pcmd, "say") == 0 || Q_stricmp(pcmd, "say_team") == 0)
 	{
-		// If has any argument
-		if (parg1)
-		{
-			// Compare if is an admin or player prefix
-			if (parg1[0u] == gMatchBot.m_AdminPrefix->string[0u] || parg1[0u] == gMatchBot.m_PlayerPrefix->string[0u])
-			{
-				// Get arguments
-				auto pCmdArgs = g_engfuncs.pfnCmd_Args();
-
-				// If is not null
-				if (pCmdArgs)
-				{
-					// If string is not empty
-					if (pCmdArgs[0u] != '\0')
-					{
-						// Set command format
-						char pCmdFormat[] = "%s\n";
-
-						// Execute interal client command with arguments
-						g_engfuncs.pfnClientCommand(Player->edict(), pCmdFormat, pCmdArgs);
-
-						// Block chat
-						return true;
-					}
-				}
-			}
-		}
+	    if (parg1)
+	    {
+	        // Checks if parg1[0] is '/' or '!'
+	        if (parg1[0u] == gMatchBot.m_AdminPrefix->string[0u] || parg1[0u] == gMatchBot.m_PlayerPrefix->string[0u])
+	        {
+	            auto pCmdArgs = g_engfuncs.pfnCmd_Args();
+	            
+	            // pCmdArgs = "/ready" (still has the prefix!)
+	            g_engfuncs.pfnClientCommand(Player->edict(), "%s\n", pCmdArgs);
+	            
+	            return true; // Blocks the chat
+	        }
+	    }
 	}
 	else
 	{
