@@ -112,15 +112,24 @@ bool CMatchCommand::ClientCommand(CBasePlayer* Player, const char* pcmd, const c
 	{
 	    if (parg1)
 	    {
-	        // Checks if parg1[0] is '/' or '!'
 	        if (parg1[0u] == gMatchBot.m_AdminPrefix->string[0u] || parg1[0u] == gMatchBot.m_PlayerPrefix->string[0u])
 	        {
 	            auto pCmdArgs = g_engfuncs.pfnCmd_Args();
 	            
-	            // pCmdArgs = "/ready" (still has the prefix!)
-	            g_engfuncs.pfnClientCommand(Player->edict(), "%s\n", pCmdArgs);
-	            
-	            return true; // Blocks the chat
+	            if (pCmdArgs)
+	            {
+	                if (pCmdArgs[0u] != '\0')
+	                {
+	                    // Skip the first character (the prefix)
+	                    const char* pCmdWithoutPrefix = pCmdArgs + 1;
+	                    
+	                    // Declare as array instead of string literal
+	                    char pCmdFormat[] = "%s\n";
+	                    g_engfuncs.pfnClientCommand(Player->edict(), pCmdFormat, pCmdWithoutPrefix);
+	                    
+	                    return true;
+	                }
+	            }
 	        }
 	    }
 	}
