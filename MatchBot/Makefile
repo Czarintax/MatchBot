@@ -1,23 +1,23 @@
 # Include CS SDK
-CSSDK 		= include/cssdk
+CSSDK = include/cssdk
 # Include Metamod SDK
-METAMOD 	= include/metamod
+METAMOD = include/metamod
 # Release file output name
-NAME 		= matchbot
+NAME = matchbot
 # Release directory
-BIN_DIR 	= Release
+BIN_DIR = Release
 # G++
-COMPILER 	= g++
+COMPILER = g++
 # Source files
-SOURCES 	= $(wildcard *.cpp)
+SOURCES = $(wildcard *.cpp)
 # Object files
-OBJECTS 	= $(SOURCES:%.cpp=$(BIN_DIR)/%.o)
+OBJECTS = $(SOURCES:%.cpp=$(BIN_DIR)/%.o)
 # Linker Libs
-LINKER 		= -static-libgcc -static-libstdc++
+LINKER = 
 # C flags
-CFLAGS 		= -std=gnu++11 -Wall -Wno-switch -Wno-unknown-pragmas -Wno-strict-aliasing -shared -m32 -mtune=generic -msse3 -pipe -O2 -fPIC -DNDEBUG -Dlinux -D__linux__ -DGLIBCXX_USE_CXX11_ABI=0 -U_FORTIFY_SOURCE
+CFLAGS = -std=gnu++11 -Wall -Wno-switch -Wno-unknown-pragmas -Wno-strict-aliasing -shared -m32 -mtune=generic -msse3 -pipe -s -O3 -fPIC -DNDEBUG -Dlinux -D__linux__ -DGLIBCXX_USE_CXX11_ABI=0 -U_FORTIFY_SOURCE
 # Include directory
-INCLUDE 	= -I. -I$(CSSDK)/common -I$(CSSDK)/dlls -I$(CSSDK)/engine -I$(CSSDK)/game_shared -I$(CSSDK)/pm_shared -I$(CSSDK)/public -I$(METAMOD)
+INCLUDE = -I. -I$(CSSDK)/common -I$(CSSDK)/dlls -I$(CSSDK)/engine -I$(CSSDK)/game_shared -I$(CSSDK)/pm_shared -I$(CSSDK)/public -I$(METAMOD)
 
 all:
 	mkdir -p $(BIN_DIR)
