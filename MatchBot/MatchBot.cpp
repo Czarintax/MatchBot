@@ -898,11 +898,11 @@ void CMatchBot::PlayerGetIntoGame(CBasePlayer* Player)
 	if (this->m_State != STATE_DEAD)
 	{
 		// If is not BOT
-		if (!Player->IsBot())
+		if (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot())
 		{
 			// Send messages
 			gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("%s Build %s (^3%s^1)"), Plugin_info.name, Plugin_info.date, Plugin_info.author);
-			gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Say ^4.help^1 to view command list."));
+			gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Say ^4/help^1 to view command list."));
 		}
 	}
 }
