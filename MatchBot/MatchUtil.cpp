@@ -257,7 +257,7 @@ int CMatchUtil::GetCount(TeamName Team)
 
 		if (Player)
 		{
-			if (!Player->IsDormant())
+			if (!Player->IsDormant() && (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot()))
 			{
 				if (Player->m_iTeam == Team)
 				{
