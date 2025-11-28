@@ -217,6 +217,9 @@ void CMatchBot::ServerActivate()
 
 	// Score Info
 	gMatchMessage.RegisterHook("ScoreInfo", this->ScoreInfo);
+
+	// Register HudText message for DHUD
+	gmsgHudText = g_engfuncs.pfnRegUserMsg("HudText", -1);
 }
 
 // On server deactivate
