@@ -8,7 +8,7 @@ void CMatchReady::Init()
 
 	std::fill(this->m_Ready.begin(), this->m_Ready.end(), false);
 
-	gMatchUtil.SayText(nullptr, PRINT_TEAM_RED, _T("Say ^4.ready^1 to continue."));
+	gMatchUtil.SayText(nullptr, PRINT_TEAM_RED, _T("Say ^4/ready^1 to continue."));
 
 	gMatchTask.Create(TASK_READY_SYSTEM, 0.5f, true, (void*)this->Task, 1);
 }
@@ -105,7 +105,7 @@ void CMatchReady::PlayerGetIntoGame(CBasePlayer* Player)
 	{
 		if (!this->GetReady(Player->entindex()))
 		{
-			gMatchUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Say ^4.ready^1 to continue."));
+			gMatchUtil.SayText(Player->edict(), PRINT_TEAM_RED, _T("Say ^4/ready^1 to continue."));
 		}
 	}
 }
