@@ -72,6 +72,9 @@ public:
 
 	// Send hudmessage
 	void HudMessage(edict_t* pEntity, hudtextparms_t textparms, const char* Format, ...);
+	
+	// Send dynamic hudmessage (no flicker)	
+	void DHudMessage(edict_t* pEntity, hudtextparms_t textparms, const char* Format, ...);
 
 	// Format string returning constant char array result
 	const char* FormatString(const char* Format, ...);
