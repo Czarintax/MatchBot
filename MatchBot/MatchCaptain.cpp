@@ -229,7 +229,7 @@ void CMatchCaptain::NextMenu(CBasePlayer* Captain)
 
 void CMatchCaptain::Menu(CBasePlayer* Captain)
 {
-	if (gMatchUtil.GetCount(SPECTATOR) == 1 || !(Player->edict()->v.flags & FL_FAKECLIENT) || !Captain->IsBot())
+	if (gMatchUtil.GetCount(SPECTATOR) == 1 || !(Captain->edict()->v.flags & FL_FAKECLIENT) || !Captain->IsBot())
 	{
 		gMatchTask.Create(Captain->entindex(), 1.0f, false, (void*)this->GetRandomPlayer, Captain->entindex());
 	}
