@@ -91,11 +91,30 @@ void CMatchVoteMap::Stop(int VoteFailType)
 
     if (Winner.Votes > 0)
     {
-        g_engfuncs.pfnCvar_DirectSet(gMatchBot.m_VoteMap, "0");
-															
-        gMatchChangeMap.ChangeMap(Winner.Name, 5.0f, true);
-        
-        gMatchUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Changing map to ^4%s^1..."), Winner.Name.c_str());
+        // Get current map name
+        const char* currentMap = STRING(gpGlobals->mapname);
+
+        // Check if voted map is the current map
+        if (Q_stricmp(Winner.Name.c_str(), currentMap) == 0)
+        {
+            // Current map won, just continue
+            gMatchUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Players voted to continue on ^4%s^1."), Winner.Name.c_str());
+            
+            // Remove Vote Map Variable
+            g_engfuncs.pfnCvar_DirectSet(gMatchBot.m_VoteMap, "0");
+            
+            // Continue to next state
+            gMatchTask.Create(TASK_CHANGE_STATE, 2.0f, false, (void*)gMatchBot.NextState, STATE_START);
+        }
+        else
+        {
+            // Different map won, change map
+            g_engfuncs.pfnCvar_DirectSet(gMatchBot.m_VoteMap, "0");
+
+            gMatchChangeMap.ChangeMap(Winner.Name, 5.0f, true);
+
+            gMatchUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Changing map to ^4%s^1..."), Winner.Name.c_str());
+        }
     }
     else
     {
