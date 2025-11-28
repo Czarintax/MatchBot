@@ -99,4 +99,5 @@ public:
 };
 
 extern CMatchUtil gMatchUtil;
+extern int gmsgHudText;
 
