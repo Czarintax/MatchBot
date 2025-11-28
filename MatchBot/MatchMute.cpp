@@ -62,13 +62,13 @@ bool CMatchMute::GetMute(CBasePlayer* Player, CBasePlayer* Target)
 		{
 			if (!Player->IsDormant() && !Target->IsDormant())
 			{
-				if (!Player->IsBot() && !Target->IsBot())
+				if ((!(Player->edict()->v.flags & FL_FAKECLIENT) && !(Target->edict()->v.flags & FL_FAKECLIENT)) || (!Player->IsBot() && !Target->IsBot()))
 				{
 					auto PlayerAuth = g_engfuncs.pfnGetPlayerAuthId(Player->edict());
 
 					if (PlayerAuth)
 					{
-						auto TargetAuth = Target->IsBot() ? STRING(Target->edict()->v.netname) : g_engfuncs.pfnGetPlayerAuthId(Target->edict());
+						auto TargetAuth = ((Target->edict()->v.flags & FL_FAKECLIENT) || Target->IsBot()) ? STRING(Target->edict()->v.netname) : g_engfuncs.pfnGetPlayerAuthId(Target->edict());
 
 						if (TargetAuth)
 						{
@@ -99,7 +99,7 @@ void CMatchMute::SetMute(CBasePlayer* Player, CBasePlayer* Target, bool Mute)
 
 			if (PlayerAuth)
 			{
-				auto TargetAuth = Target->IsBot() ? STRING(Target->edict()->v.netname) : g_engfuncs.pfnGetPlayerAuthId(Target->edict());
+				auto TargetAuth = ((Target->edict()->v.flags & FL_FAKECLIENT) || Target->IsBot()) ? STRING(Target->edict()->v.netname) : g_engfuncs.pfnGetPlayerAuthId(Target->edict());
 
 				if (TargetAuth)
 				{
