@@ -34,7 +34,7 @@ void CMatchCaptain::Init(int PlayersMin)
 
 				Player->ClearConditions(BIT_CONDITION_INMENU);
 
-				if (!Player->IsBot())
+				if (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot())
 				{
 					PlayerCount += 1;
 				}
