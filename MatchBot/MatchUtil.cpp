@@ -213,7 +213,11 @@ void CMatchUtil::ClientCommand(edict_t *pEntity, const char *Format, ...)
 
 	if (!FNullEnt(pEntity))
 	{
-		g_engfuncs.pfnClientCommand(pEntity, Command);
+		// Check if not a bot before sending command
+		if (!(pEntity->v.flags & FL_FAKECLIENT))
+		{
+			g_engfuncs.pfnClientCommand(pEntity, Command);
+		}
 	}
 	else
 	{
