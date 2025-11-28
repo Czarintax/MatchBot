@@ -8,7 +8,7 @@ void CMatchVoteMap::Init(int VoteMapType, int VoteMapFail)
     // Clear map data
     this->m_Data.clear();
 
-    // Load maps data
+    // Load maps data (now includes current map)
     this->m_Data = this->Load();
 
     // Set player count to 0
@@ -81,7 +81,7 @@ void CMatchVoteMap::Stop(int VoteFailType)
         gMatchMenu[EntityIndex].Hide(EntityIndex);
     }
 
-    // Delete vote list tas
+    // Delete vote list task
     gMatchTask.Remove(TASK_VOTE_LIST);
 
     // Delete vote timer
@@ -91,11 +91,30 @@ void CMatchVoteMap::Stop(int VoteFailType)
 
     if (Winner.Votes > 0)
     {
-        g_engfuncs.pfnCvar_DirectSet(gMatchBot.m_VoteMap, "0");
+        // Get current map name
+        const char* currentMap = STRING(gpGlobals->mapname);
 
-        gMatchChangeMap.ChangeMap(Winner.Name, 5.0f, true);
+        // Check if voted map is the current map
+        if (Q_stricmp(Winner.Name.c_str(), currentMap) == 0)
+        {
+            // Current map won, just continue
+            gMatchUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Players voted to continue on ^4%s^1."), Winner.Name.c_str());
+            
+            // Remove Vote Map Variable
+            g_engfuncs.pfnCvar_DirectSet(gMatchBot.m_VoteMap, "0");
+            
+            // Continue to next state
+            gMatchTask.Create(TASK_CHANGE_STATE, 2.0f, false, (void*)gMatchBot.NextState, STATE_START);
+        }
+        else
+        {
+            // Different map won, change map
+            g_engfuncs.pfnCvar_DirectSet(gMatchBot.m_VoteMap, "0");
 
-        gMatchUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Changing map to ^4%s^1..."), Winner.Name.c_str());
+            gMatchChangeMap.ChangeMap(Winner.Name, 5.0f, true);
+
+            gMatchUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Changing map to ^4%s^1..."), Winner.Name.c_str());
+        }
     }
     else
     {
@@ -127,11 +146,11 @@ void CMatchVoteMap::Stop(int VoteFailType)
 // Load Vote Map maps
 std::vector<P_MAP_ITEM> CMatchVoteMap::Load()
 {
-    // Crete Map List to return
+    // Create Map List to return
     std::vector<P_MAP_ITEM> MapList;
 
-    // Get maps from maps.ini and skip current map
-    auto Maps = gMatchUtil.GetMapList(false);
+    // Get maps from maps.ini INCLUDING current map
+    auto Maps = gMatchUtil.GetMapList(true);
 
     // Loop loaded map list
     for (auto const& Map : Maps)
