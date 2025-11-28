@@ -498,6 +498,30 @@ hudtextparms_t CMatchUtil::HudParam(int red, int green, int blue, float x, float
 	return hud;
 }
 
+hudtextparms_t CMatchUtil::DHudParam(int red, int green, int blue, float x, float y, int channel, float holdtime, int effects)
+{
+	hudtextparms_t textparms;
+
+	textparms.channel = channel;
+	textparms.x = x;
+	textparms.y = y;
+	textparms.r1 = red;
+	textparms.g1 = green;
+	textparms.b1 = blue;
+	textparms.a1 = 0;
+	textparms.r2 = 0;
+	textparms.g2 = 0;
+	textparms.b2 = 0;
+	textparms.a2 = 0;
+	textparms.effect = effects;
+	textparms.fadeinTime = 0.0f;
+	textparms.fadeoutTime = 0.0f;
+	textparms.holdTime = holdtime;
+	textparms.fxTime = 0.0f;
+
+	return textparms;
+}
+
 void CMatchUtil::HudMessage(edict_t* pEntity, hudtextparms_t textparms, const char* Format, ...)
 {
 	va_list argList;
