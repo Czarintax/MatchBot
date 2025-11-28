@@ -552,6 +552,37 @@ void CMatchUtil::HudMessage(edict_t* pEntity, hudtextparms_t textparms, const ch
 	g_engfuncs.pfnMessageEnd();
 }
 
+void CMatchUtil::DHudMessage(edict_t* pEntity, hudtextparms_t textparms, const char* Format, ...)
+{
+	va_list argList;
+	va_start(argList, Format);
+	char Buffer[511];
+	vsnprintf(Buffer, sizeof(Buffer), Format, argList);
+	va_end(argList);
+	
+	this->ParseLinesAndColors(Buffer);
+	
+	if (pEntity)
+	{
+		g_engfuncs.pfnMessageBegin(MSG_ONE_UNRELIABLE, gmsgHudText, NULL, pEntity);
+	}
+	else
+	{
+		g_engfuncs.pfnMessageBegin(MSG_BROADCAST, gmsgHudText, NULL, NULL);
+	}
+	
+	g_engfuncs.pfnWriteByte(textparms.channel & 0xFF);
+	g_engfuncs.pfnWriteShort(this->FixedSigned16(textparms.x, BIT(13)));
+	g_engfuncs.pfnWriteShort(this->FixedSigned16(textparms.y, BIT(13)));
+	g_engfuncs.pfnWriteByte(textparms.r1);
+	g_engfuncs.pfnWriteByte(textparms.g1);
+	g_engfuncs.pfnWriteByte(textparms.b1);
+	g_engfuncs.pfnWriteByte(textparms.a1);
+	g_engfuncs.pfnWriteString(Buffer);
+	
+	g_engfuncs.pfnMessageEnd();
+}
+
 const char* CMatchUtil::FormatString(const char* Format, ...)
 {
 	va_list argList;
