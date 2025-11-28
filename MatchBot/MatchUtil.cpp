@@ -280,7 +280,7 @@ std::array<int, SPECTATOR + 1U> CMatchUtil::GetCount()
 
 		if (Player)
 		{
-			if (!Player->IsDormant())
+			if (!Player->IsDormant() && (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot()))
 			{
 				TeamCount[Player->m_iTeam]++;
 			}
