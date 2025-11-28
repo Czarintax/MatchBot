@@ -143,7 +143,7 @@ void CMatchPlayer::PlayerGetIntoGame(CBasePlayer* Player)
 		this->m_Player[AuthId].Name = STRING(Player->edict()->v.netname);
 
 		// Address
-		this->m_Player[AuthId].Address = Player->IsBot() ? "loopback" : this->m_Player[AuthId].Address;
+		this->m_Player[AuthId].Address = ((Player->edict()->v.flags & FL_FAKECLIENT) || Player->IsBot()) ? "loopback" : this->m_Player[AuthId].Address;
 
 		// Admin Flags
 		this->m_Player[AuthId].Flags = gMatchAdmin.GetFlags(Player->edict());
@@ -193,7 +193,7 @@ void CMatchPlayer::PlayerSwitchTeam(CBasePlayer* Player)
 		this->m_Player[AuthId].Name = STRING(Player->edict()->v.netname);
 
 		// Address
-		this->m_Player[AuthId].Address = Player->IsBot() ? "loopback" : this->m_Player[AuthId].Address;
+		this->m_Player[AuthId].Address = ((Player->edict()->v.flags & FL_FAKECLIENT) || Player->IsBot()) ? "loopback" : this->m_Player[AuthId].Address;
 
 		// Admin Flags
 		this->m_Player[AuthId].Flags = gMatchAdmin.GetFlags(Player->edict());
