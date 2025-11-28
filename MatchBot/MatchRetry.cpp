@@ -48,7 +48,7 @@ void CMatchRetry::PlayerDisconnect(edict_t* pEntity, bool crash, const char* Rea
 						{
 							if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 							{
-								if (!Player->IsBot() && !Player->IsDormant())
+								if ((!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot()) && !Player->IsDormant())
 								{
 									auto Auth = g_engfuncs.pfnGetPlayerAuthId(pEntity);
 
