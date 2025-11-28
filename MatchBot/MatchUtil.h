@@ -70,6 +70,9 @@ public:
 	// Set hudmessage parameters
 	hudtextparms_t HudParam(int red, int green, int blue, float x, float y, int effects, float fxtime, float holdtime, float fadeintime, float fadeouttime, int channel);
 
+	// Set dynamic hudmessage parameters
+	hudtextparms_t DHudParam(int red, int green, int blue, float x, float y, int channel, float holdtime, int effects);
+
 	// Send hudmessage
 	void HudMessage(edict_t* pEntity, hudtextparms_t textparms, const char* Format, ...);
 	
