@@ -1,6 +1,7 @@
 #include "precompiled.h"
 
 CMatchBot gMatchBot;
+int gmsgHudText = 0;
 
 // Server activate
 void CMatchBot::ServerActivate()
