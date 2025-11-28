@@ -350,7 +350,7 @@ void CMatchStats::SendDeathMessage(CBaseEntity* KillerEntity, CBasePlayer* Victi
 						}
 
 						// TEST
-						if (!Killer->IsBot())
+						if (!(Killer->edict()->v.flags & FL_FAKECLIENT) || !Killer->IsBot()))
 						{
 							LOG_CONSOLE
 							(
