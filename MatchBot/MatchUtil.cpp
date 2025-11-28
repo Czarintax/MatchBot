@@ -315,7 +315,7 @@ int CMatchUtil::GetPlayers(CBasePlayer* Players[MAX_CLIENTS], bool InGameOnly, b
 
 				if (!IncludeBots)
 				{
-					if (Player->IsBot())
+					if ((Player->edict()->v.flags & FL_FAKECLIENT) || Player->IsBot())
 					{
 						continue;
 					}
@@ -356,7 +356,7 @@ std::vector<CBasePlayer*> CMatchUtil::GetPlayers(bool InGameOnly, bool IncludeBo
 
 				if (!IncludeBots)
 				{
-					if (Player->IsBot())
+					if ((Player->edict()->v.flags & FL_FAKECLIENT) || Player->IsBot())
 					{
 						continue;
 					}
@@ -386,7 +386,7 @@ std::vector<CBasePlayer*> CMatchUtil::GetPlayers(TeamName Team, bool IncludeBots
 				{
 					if (!IncludeBots)
 					{
-						if (Player->IsBot())
+						if ((Player->edict()->v.flags & FL_FAKECLIENT) || Player->IsBot())
 						{
 							continue;
 						}
