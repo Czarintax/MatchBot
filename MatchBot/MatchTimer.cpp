@@ -62,11 +62,11 @@ void CMatchTimer::Task(int PlayersMin)
 
 		if (NeededCount > 1)
 		{
-			gMatchUtil.DHudMessage(nullptr, gMatchUtil.DHudParam(0, 255, 0, -1.0, 0.2, 1, 0.0, 1), _T("WARMUP\n%d PLAYERS LEFT"), NeededCount);
+			gMatchUtil.HudMessage(nullptr, gMatchUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53, 0.0, 0.0, 1), _T("WARMUP^n%d PLAYERS LEFT"), NeededCount);
 		}
 		else
 		{
-			gMatchUtil.DHudMessage(nullptr, gMatchUtil.DHudParam(0, 255, 0, -1.0, 0.2, 1, 0.0, 1), _T("WARMUP\n%d PLAYER LEFT"), NeededCount);
+			gMatchUtil.HudMessage(nullptr, gMatchUtil.HudParam(0, 255, 0, -1.0, 0.2, 0, 0.53, 0.53, 0.0, 0.0, 1), _T("WARMUP^n%d PLAYER LEFT"), NeededCount);
 		}
 	}
 	else
