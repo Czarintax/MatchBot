@@ -348,7 +348,7 @@ void CMatchStats::SendDeathMessage(CBaseEntity* KillerEntity, CBasePlayer* Victi
 							// Set revenge
 							this->m_Player[KillerAuth].Stats[this->m_State].Revenges++;
 						}
-
+						/*
 						// TEST
 						if (!(Killer->edict()->v.flags & FL_FAKECLIENT) || !Killer->IsBot())
 						{
@@ -365,6 +365,7 @@ void CMatchStats::SendDeathMessage(CBaseEntity* KillerEntity, CBasePlayer* Victi
 								this->m_Player[KillerAuth].Stats[this->m_State].Headshots
 							);
 						}
+						*/
 					}
 					else
 					{
