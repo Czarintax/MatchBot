@@ -71,7 +71,7 @@ void CMatchMenu::Hide(int EntityIndex)
 	{
 		Player->m_iMenu = Menu_OFF;
 
-		if (!Player->IsDormant() && (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot())
+		if (!Player->IsDormant() && (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot()))
 		{
 			static int iMsgShowMenu;
 
