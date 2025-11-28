@@ -240,7 +240,7 @@ void CMatchMenu::ShowMenu(int EntityIndex, int Slots, int Time, std::string Text
 	{
 		if (!Player->IsDormant())
 		{
-			if (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot()))
+			if (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot())
 			{
 				static int iMsgShowMenu;
 
