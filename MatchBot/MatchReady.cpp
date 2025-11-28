@@ -58,7 +58,7 @@ void CMatchReady::Task(int Running)
 			{
 				if (Player->m_iTeam == TERRORIST || Player->m_iTeam == CT)
 				{
-					int ReadyState = (Player->IsBot() || gMatchReady.GetReady(Player->entindex())) ? 1 : 0;
+					int ReadyState = ((Player->edict()->v.flags & FL_FAKECLIENT) || Player->IsBot() || gMatchReady.GetReady(Player->entindex())) ? 1 : 0;
 
 					PlayerCount[ReadyState]++;
 
