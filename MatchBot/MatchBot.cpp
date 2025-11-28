@@ -807,7 +807,7 @@ bool CMatchBot::PlayerJoinTeam(CBasePlayer* Player, int Slot)
 	if (Player->m_iTeam == UNASSIGNED)
 	{
 		// If is not bot
-		if (!Player->IsBot())
+		if (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot())
 		{
 			// Send team info, to enable colors in chat messages
 			gMatchUtil.TeamInfo(Player->edict(), MAX_CLIENTS + TERRORIST + 1, "TERRORIST");
