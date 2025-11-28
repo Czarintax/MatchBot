@@ -1306,15 +1306,31 @@ void CMatchBot::RecordDemo(edict_t *pEntity)
 
 			if (!FNullEnt(pEntity))
 			{
-				// Single player
-				gMatchUtil.ClientCommand(pEntity, "stop; record \"mb-%s\";", DateTime);
-				gMatchUtil.SayText(pEntity, PRINT_TEAM_DEFAULT, _T("Recording demo to ^3mb-%s.dem^1 in your client."), DateTime);
+				// Single player - check if not a bot
+				if (!(pEntity->v.flags & FL_FAKECLIENT))
+				{
+					gMatchUtil.ClientCommand(pEntity, "stop; record \"mb-%s\";", DateTime);
+					gMatchUtil.SayText(pEntity, PRINT_TEAM_DEFAULT, _T("Recording demo to ^3mb-%s.dem^1 in your client."), DateTime);
+				}
 			}
 			else
 			{
-				// All players (nullptr = broadcast)
-				gMatchUtil.ClientCommand(nullptr, "stop; record \"mb-%s\";", DateTime);
-				gMatchUtil.SayText(nullptr, PRINT_TEAM_DEFAULT, _T("Recording demo to ^3mb-%s.dem^1 in your client."), DateTime);
+				// All real players only (skip bots)
+				for (int i = 1; i <= gpGlobals->maxClients; ++i)
+				{
+					auto Player = UTIL_PlayerByIndexSafe(i);
+					if (Player && !Player->IsDormant())
+					{
+						edict_t* pPlayerEdict = Player->edict();
+						
+						// Skip bots
+						if (pPlayerEdict && !(pPlayerEdict->v.flags & FL_FAKECLIENT))
+						{
+							gMatchUtil.ClientCommand(pPlayerEdict, "stop; record \"mb-%s\";", DateTime);
+							gMatchUtil.SayText(pPlayerEdict, PRINT_TEAM_DEFAULT, _T("Recording demo to ^3mb-%s.dem^1 in your client."), DateTime);
+						}
+					}
+				}
 			}
 		}
 	}
