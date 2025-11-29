@@ -149,7 +149,7 @@ void CMatchAdminMenu::KickMenu(int EntityIndex)
 
 	gMatchMenu[EntityIndex].Create(_T("Kick Player"), true, (void*)this->KickMenuHandle);
 
-	auto Players = gMatchUtil.GetPlayers(false, true);
+	auto Players = gMatchUtil.GetPlayers(false, false);
 
 	for(auto const & Player : Players)
 	{
@@ -206,7 +206,7 @@ void CMatchAdminMenu::BanMenu(int EntityIndex)
 	gMatchMenu[EntityIndex].Create(_T("Ban Player"), true, (void*)this->BanMenuHandle);
 
 	// Get players
-	auto Players = gMatchUtil.GetPlayers(false, true);
+	auto Players = gMatchUtil.GetPlayers(false, false);
 
 	// Loop Players
 	for (auto const& Player : Players)
@@ -284,7 +284,7 @@ void CMatchAdminMenu::SlayMenu(int EntityIndex)
 
 	gMatchMenu[EntityIndex].Create(_T("Slay Player"), true, (void*)this->SlayMenuHandle);
 
-	auto Players = gMatchUtil.GetPlayers(false, true);
+	auto Players = gMatchUtil.GetPlayers(false, false);
 
 	for (auto const& Player : Players)
 	{
@@ -342,7 +342,7 @@ void CMatchAdminMenu::TeamMenu(int EntityIndex)
 
 	gMatchMenu[EntityIndex].Create(_T("Change Team"), true, (void*)this->TeamMenuHandle);
 
-	auto Players = gMatchUtil.GetPlayers(false, true);
+	auto Players = gMatchUtil.GetPlayers(false, false);
 
 	for (auto const& Player : Players)
 	{
