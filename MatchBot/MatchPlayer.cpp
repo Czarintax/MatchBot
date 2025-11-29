@@ -414,7 +414,7 @@ void CMatchPlayer::PlayerMenuActionHandle(int EntityIndex, P_MENU_ITEM Item)
 				{
 					case 0: // Ban
 					{
-						gMatchMenu[EntityIndex].Create(gMatchUtil.FormatString(_T("Choose a time to ban:^n^w%s^d"), PlayerInfo->Name.c_str()), true, (void*)gMatchPlayer.PlayerBanMenuActionHandle);
+						gMatchMenu[EntityIndex].Create(gMatchUtil.FormatString(_T("Choose a time to ban:^w%s^d"), PlayerInfo->Name.c_str()), true, (void*)gMatchPlayer.PlayerBanMenuActionHandle);
 
 						std::vector<time_t> BanTimes = { 0, 5, 10, 15, 30, 60, 120, 240, 480, 960, 1440, 10080, 43200 };
 
