@@ -174,11 +174,128 @@ bool CMatchCommand::ClientCommand(CBasePlayer* Player, const char* pcmd, const c
 					// Execute the command switch
 					switch (Command->second.Index)
 					{
-						// ... all other cases remain the same ...
-						
+						case CMD_PLAYER_STATUS:
+						{
+							gMatchBot.Status(Player);
+							return true;
+						}
+						case CMD_PLAYER_SCORE:
+						{
+							gMatchBot.Scores(Player, false);
+							return true;
+						}
+						case CMD_PLAYER_READY:
+						{
+							gMatchReady.Ready(Player);
+							return true;
+						}
+						case CMD_PLAYER_NOTREADY:
+						{
+							gMatchReady.NotReady(Player);
+							return true;
+						}
+						case CMD_PLAYER_HP:
+						{
+							gMatchRound.ShowHP(Player, true, false);
+							return true;
+						}
+						case CMD_PLAYER_DMG:
+						{
+							gMatchRound.ShowDamage(Player, true, false);
+							return true;
+						}
+						case CMD_PLAYER_RDMG:
+						{
+							gMatchRound.ShowReceivedDamage(Player, true, false);
+							return true;
+						}
+						case CMD_PLAYER_SUM:
+						{
+							gMatchRound.ShowSummary(Player, true, false);
+							return true;
+						}
+						case CMD_PLAYER_HELP:
+						{
+							gMatchBot.Help(Player, false);
+							return true;
+						}
+						case CMD_PLAYER_VOTE:
+						{
+							gMatchVoteMenu.Menu(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_KICK:
+						{
+							gMatchVoteMenu.VoteKick(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_MAP:
+						{
+							gMatchVoteMenu.VoteMap(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_PAUSE:
+						{
+							gMatchVoteMenu.VotePause(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_RESTART:
+						{
+							gMatchVoteMenu.VoteRestart(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_STOP:
+						{
+							gMatchVoteMenu.VoteStop(Player);
+							return true;
+						}
+						case CMD_PLAYER_MUTE_MENU:
+						{
+							gMatchMute.Menu(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_SURRENDER:
+						{
+							gMatchVoteMenu.VoteSurrender(Player);
+							return true;
+						}
+						case CMD_ADMIN_MENU:
+						{
+							gMatchAdminMenu.MainMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_KICK:
+						{
+							gMatchAdminMenu.KickMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_BAN:
+						{
+							gMatchAdminMenu.BanMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_KILL:
+						{
+							gMatchAdminMenu.SlayMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_TEAM:
+						{
+							gMatchAdminMenu.TeamMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_MAP:
+						{
+							gMatchAdminMenu.MapMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_CONTROL:
+						{
+							gMatchAdminMenu.ControlMenu(Player->entindex());
+							return true;
+						}
 						case CMD_ADMIN_MESSAGE:
 						{
-							// Pass arguments directly if available
 							if (!arguments.empty())
 							{
 								gMatchAdminMenu.Message(Player, arguments.c_str());
@@ -191,7 +308,6 @@ bool CMatchCommand::ClientCommand(CBasePlayer* Player, const char* pcmd, const c
 						}
 						case CMD_ADMIN_COMMAND:
 						{
-							// Pass arguments directly if available
 							if (!arguments.empty())
 							{
 								gMatchAdminMenu.Rcon(Player, arguments.c_str());
@@ -202,8 +318,56 @@ bool CMatchCommand::ClientCommand(CBasePlayer* Player, const char* pcmd, const c
 							}
 							return true;
 						}
-						
-						// ... rest of cases ...
+						case CMD_ADMIN_SWAP:
+						{
+							gMatchAdminMenu.SwapTeams(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_VOTE_MAP:
+						{
+							gMatchBot.StartVoteMap(Player);
+							return true;
+						}
+						case CMD_ADMIN_VOTE_TEAM:
+						{
+							gMatchBot.StartVoteTeam(Player);
+							return true;
+						}
+						case CMD_ADMIN_START_MATCH:
+						{
+							gMatchBot.StartMatch(Player);
+							return true;
+						}
+						case CMD_ADMIN_STOP_MATCH:
+						{
+							gMatchBot.StopMatch(Player);
+							return true;
+						}
+						case CMD_ADMIN_RESTART_MATCH:
+						{
+							gMatchBot.RestartMatch(Player);
+							return true;
+						}
+						case CMD_ADMIN_PAUSE_MATCH:
+						{
+							gMatchPause.Init(Player, UNASSIGNED);
+							return true;
+						}
+						case CMD_ADMIN_HELP:
+						{
+							gMatchBot.Help(Player, true);
+							return true;
+						}
+						case CMD_ADMIN_PLAYER_LIST:
+						{
+							gMatchPlayer.PlayerMenu(Player);
+							return true;
+						}
+						case CMD_ADMIN_CVAR_MENU:
+						{
+							gMatchCvarMenu.Menu(Player);
+							return true;
+						}
 					}
 				}
 				
