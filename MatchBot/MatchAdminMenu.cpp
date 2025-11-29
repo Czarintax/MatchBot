@@ -592,7 +592,7 @@ bool CMatchAdminMenu::Message(CBasePlayer* Player)
 		}
 	}
 
-	gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Usage: !msg ^3<Text Message>^1"));
+	gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Usage: /msg ^3<Text Message>^1"));
 
 	return false;
 }
@@ -643,7 +643,7 @@ bool CMatchAdminMenu::Rcon(CBasePlayer* Player)
 		}
 	}
 
-	gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Usage: !cmd ^3<Server Command>^1"));
+	gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Usage: /cmd ^3<Server Command>^1"));
 
 	return false;
 }
