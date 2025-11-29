@@ -294,15 +294,19 @@ void CMatchPlayer::PlayerMenu(CBasePlayer* Player)
 
 			for (auto const& Target : this->m_Player)
 			{
+				// Skip bots (YaPB, FL_FAKECLIENT, any fakeclient)
+    			if (Target.second.Auth == "BOT")
+        			continue;
+				
 				if (!gMatchAdmin.Access(Target.second.Auth, ADMIN_IMMUNITY))
 				{
 					if (Target.second.Status == 2)
 					{
-						gMatchMenu[EntityIndex].AddItem(Target.second.UserId, gMatchUtil.FormatString("%s \\R\\y%s", Target.second.Name.c_str(), gMatchBot.GetTeam(Target.second.LastTeam, true)), false, Target.second.UserId);
+						gMatchMenu[EntityIndex].AddItem(Target.second.UserId, gMatchUtil.FormatString("%s \\y\\R%s", Target.second.Name.c_str(), gMatchBot.GetTeam(Target.second.LastTeam, true)), false, Target.second.UserId);
 					}
 					else
 					{
-						gMatchMenu[EntityIndex].AddItem(Target.second.UserId, gMatchUtil.FormatString("%s \\R\\y%s", Target.second.Name.c_str(), (Target.second.Status == 1) ? _T("Online") : _T("Offline")), false, Target.second.UserId);
+						gMatchMenu[EntityIndex].AddItem(Target.second.UserId, gMatchUtil.FormatString("%s \\y\\R%s", Target.second.Name.c_str(), (Target.second.Status == 1) ? _T("Online") : _T("Offline")), false, Target.second.UserId);
 					}
 				}
 			}
@@ -414,7 +418,7 @@ void CMatchPlayer::PlayerMenuActionHandle(int EntityIndex, P_MENU_ITEM Item)
 				{
 					case 0: // Ban
 					{
-						gMatchMenu[EntityIndex].Create(gMatchUtil.FormatString(_T("Choose a time to ban: ^w%s^y"), PlayerInfo->Name.c_str()), true, (void*)gMatchPlayer.PlayerBanMenuActionHandle);
+						gMatchMenu[EntityIndex].Create(gMatchUtil.FormatString(_T("Choose a time to ban:^n^w%s^d"), PlayerInfo->Name.c_str()), true, (void*)gMatchPlayer.PlayerBanMenuActionHandle);
 
 						std::vector<time_t> BanTimes = { 0, 5, 10, 15, 30, 60, 120, 240, 480, 960, 1440, 10080, 43200 };
 
