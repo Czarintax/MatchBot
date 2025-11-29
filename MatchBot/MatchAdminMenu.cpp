@@ -554,67 +554,75 @@ void CMatchAdminMenu::ControlMenuHandle(int EntityIndex, P_MENU_ITEM Item)
 	}
 }
 
-bool CMatchAdminMenu::Message(CBasePlayer* Player)
+bool CMatchAdminMenu::Message(CBasePlayer* Player, const char* args)
 {
-	auto pCmdArgs = g_engfuncs.pfnCmd_Args();
-
-	if (pCmdArgs)
+	if (!gMatchAdmin.Access(Player->entindex(), ADMIN_CHAT))
 	{
-		if (pCmdArgs[0u] != '\0')
+		gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You do not have access to that command."));
+		return false;
+	}
+
+	if (args && args[0u] != '\0')
+	{
+		std::string Args = args;
+		
+		if (!Args.empty())
 		{
-			if (!gMatchAdmin.Access(Player->entindex(), ADMIN_CHAT))
-			{
-				gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You do not have access to that command."));
-				return false;
-			}
+			gMatchUtil.SayText(nullptr, Player->entindex(), _T("^3(%s)^1: %s"), STRING(Player->edict()->v.netname), Args.c_str());
 
-			std::string Args = pCmdArgs;
+			gpMetaUtilFuncs->pfnLogMessage
+			(
+				&Plugin_info,
+				"\"%s<%i><%s><%s>\" message: %s",
+				STRING(Player->edict()->v.netname),
+				g_engfuncs.pfnGetPlayerUserId(Player->edict()),
+				g_engfuncs.pfnGetPlayerAuthId(Player->edict()),
+				gMatchBot.GetTeam(Player->m_iTeam, true),
+				Args.c_str()
+			);
 
-			if (!Args.empty() && Args.length() > 2)
-			{
-				// Remove quotes
-				Args.erase(std::remove(Args.begin(), Args.end(), '\"'), Args.end());
-				
-				// Remove the /msg prefix if present
-				if (Args[0u] == '/')
-				{
-					// Find first space after command
-					size_t spacePos = Args.find(' ');
-					if (spacePos != std::string::npos)
-					{
-						// Extract everything after the space
-						Args = Args.substr(spacePos + 1);
-					}
-					else
-					{
-						// No message text provided
-						Args.clear();
-					}
-				}
-
-				if (!Args.empty())
-				{
-					gMatchUtil.SayText(nullptr, Player->entindex(), _T("^3(%s)^1: %s"), STRING(Player->edict()->v.netname), Args.c_str());
-
-					gpMetaUtilFuncs->pfnLogMessage
-					(
-						&Plugin_info,
-						"\"%s<%i><%s><%s>\" message: %s",
-						STRING(Player->edict()->v.netname),
-						g_engfuncs.pfnGetPlayerUserId(Player->edict()),
-						g_engfuncs.pfnGetPlayerAuthId(Player->edict()),
-						gMatchBot.GetTeam(Player->m_iTeam, true),
-						Args.c_str()
-					);
-
-					return true;
-				}
-			}
+			return true;
 		}
 	}
 
 	gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Usage: /msg ^3<Text Message>^1"));
+	return false;
+}
 
+bool CMatchAdminMenu::Rcon(CBasePlayer* Player, const char* args)
+{
+	if (!gMatchAdmin.Access(Player->entindex(), ADMIN_RCON))
+	{
+		gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You do not have access to that command."));
+		return false;
+	}
+
+	if (args && args[0u] != '\0')
+	{
+		std::string Args = args;
+		
+		if (!Args.empty())
+		{
+			gMatchUtil.ServerCommand(Args.c_str());
+
+			gpMetaUtilFuncs->pfnLogMessage
+			(
+				&Plugin_info,
+				"\"%s<%i><%s><%s>\" server command: %s",
+				STRING(Player->edict()->v.netname),
+				g_engfuncs.pfnGetPlayerUserId(Player->edict()),
+				g_engfuncs.pfnGetPlayerAuthId(Player->edict()),
+				gMatchBot.GetTeam(Player->m_iTeam, true),
+				Args.c_str()
+			);
+
+			gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Command ^3%s^1 executed."), Args.c_str());
+
+			return true;
+		}
+	}
+
+	gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Usage: /cmd ^3<Command>^1"));
 	return false;
 }
 
