@@ -294,10 +294,6 @@ void CMatchPlayer::PlayerMenu(CBasePlayer* Player)
 
 			for (auto const& Target : this->m_Player)
 			{
-				// Skip bots (YaPB, FL_FAKECLIENT, any fakeclient)
-    			if (Target.second.Auth == "BOT")
-        			continue;
-				
 				if (!gMatchAdmin.Access(Target.second.Auth, ADMIN_IMMUNITY))
 				{
 					if (Target.second.Status == 2)
