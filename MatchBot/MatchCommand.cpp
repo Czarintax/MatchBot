@@ -110,240 +110,223 @@ bool CMatchCommand::ClientCommand(CBasePlayer* Player, const char* pcmd, const c
 	// If player used say or say_team command
 	else if (Q_stricmp(pcmd, "say") == 0 || Q_stricmp(pcmd, "say_team") == 0)
 	{
-	    if (parg1)
-	    {
-	        // Check if message starts with '/'
-	        if (parg1[0u] == '/')
-	        {
-	            auto pCmdArgs = g_engfuncs.pfnCmd_Args();
-	            
-	            if (pCmdArgs)
-	            {
-	                if (pCmdArgs[0u] != '\0')
-	                {
-	                    // Skip the '/' prefix
-	                    const char* pCmdWithoutPrefix = pCmdArgs + 1;
-	                    
-	                    char pCmdFormat[] = "%s\n";
-	                    g_engfuncs.pfnClientCommand(Player->edict(), pCmdFormat, pCmdWithoutPrefix);
-	                    
-	                    return true;
-	                }
-	            }
-	        }
-	    }
-	}
-	else
-	{
-		// Get Command
-		auto const Command = this->m_Data.find(pcmd);
-
-		// If command was found
-		if (Command != this->m_Data.end())
+		if (parg1)
 		{
-			// If has flags to check
-			if (Command->second.Flag)
+			// Check if message starts with '/'
+			if (parg1[0u] == '/')
 			{
-				// Get Admin Flags
-				auto Flags = gMatchAdmin.GetFlags(Player->entindex());
-
-				// If do not have an access to main menu
-				if (!(Flags & Command->second.Flag))
+				// Skip the '/' and get the command
+				const char* pCommand = parg1 + 1;
+				
+				// Look up the command directly
+				auto const Command = this->m_Data.find(pCommand);
+				
+				if (Command != this->m_Data.end())
 				{
-					// Print Message
-					gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You do not have access to that command."));
-
-					// Block chat
-					return true;
+					// Check permissions
+					if (Command->second.Flag)
+					{
+						auto Flags = gMatchAdmin.GetFlags(Player->entindex());
+						
+						if (!(Flags & Command->second.Flag))
+						{
+							gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("You do not have access to that command."));
+							return true;
+						}
+					}
+					
+					// Execute the command switch
+					switch (Command->second.Index)
+					{
+						case CMD_PLAYER_STATUS:
+						{
+							gMatchBot.Status(Player);
+							return true;
+						}
+						case CMD_PLAYER_SCORE:
+						{
+							gMatchBot.Scores(Player, false);
+							return true;
+						}
+						case CMD_PLAYER_READY:
+						{
+							gMatchReady.Ready(Player);
+							return true;
+						}
+						case CMD_PLAYER_NOTREADY:
+						{
+							gMatchReady.NotReady(Player);
+							return true;
+						}
+						case CMD_PLAYER_HP:
+						{
+							gMatchRound.ShowHP(Player, true, false);
+							return true;
+						}
+						case CMD_PLAYER_DMG:
+						{
+							gMatchRound.ShowDamage(Player, true, false);
+							return true;
+						}
+						case CMD_PLAYER_RDMG:
+						{
+							gMatchRound.ShowReceivedDamage(Player, true, false);
+							return true;
+						}
+						case CMD_PLAYER_SUM:
+						{
+							gMatchRound.ShowSummary(Player, true, false);
+							return true;
+						}
+						case CMD_PLAYER_HELP:
+						{
+							gMatchBot.Help(Player, false);
+							return true;
+						}
+						case CMD_PLAYER_VOTE:
+						{
+							gMatchVoteMenu.Menu(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_KICK:
+						{
+							gMatchVoteMenu.VoteKick(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_MAP:
+						{
+							gMatchVoteMenu.VoteMap(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_PAUSE:
+						{
+							gMatchVoteMenu.VotePause(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_RESTART:
+						{
+							gMatchVoteMenu.VoteRestart(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_STOP:
+						{
+							gMatchVoteMenu.VoteStop(Player);
+							return true;
+						}
+						case CMD_PLAYER_MUTE_MENU:
+						{
+							gMatchMute.Menu(Player);
+							return true;
+						}
+						case CMD_PLAYER_VOTE_SURRENDER:
+						{
+							gMatchVoteMenu.VoteSurrender(Player);
+							return true;
+						}
+						case CMD_ADMIN_MENU:
+						{
+							gMatchAdminMenu.MainMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_KICK:
+						{
+							gMatchAdminMenu.KickMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_BAN:
+						{
+							gMatchAdminMenu.BanMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_KILL:
+						{
+							gMatchAdminMenu.SlayMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_TEAM:
+						{
+							gMatchAdminMenu.TeamMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_MAP:
+						{
+							gMatchAdminMenu.MapMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_CONTROL:
+						{
+							gMatchAdminMenu.ControlMenu(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_MESSAGE:
+						{
+							gMatchAdminMenu.Message(Player);
+							return true;
+						}
+						case CMD_ADMIN_COMMAND:
+						{
+							gMatchAdminMenu.Rcon(Player);
+							return true;
+						}
+						case CMD_ADMIN_SWAP:
+						{
+							gMatchAdminMenu.SwapTeams(Player->entindex());
+							return true;
+						}
+						case CMD_ADMIN_VOTE_MAP:
+						{
+							gMatchBot.StartVoteMap(Player);
+							return true;
+						}
+						case CMD_ADMIN_VOTE_TEAM:
+						{
+							gMatchBot.StartVoteTeam(Player);
+							return true;
+						}
+						case CMD_ADMIN_START_MATCH:
+						{
+							gMatchBot.StartMatch(Player);
+							return true;
+						}
+						case CMD_ADMIN_STOP_MATCH:
+						{
+							gMatchBot.StopMatch(Player);
+							return true;
+						}
+						case CMD_ADMIN_RESTART_MATCH:
+						{
+							gMatchBot.RestartMatch(Player);
+							return true;
+						}
+						case CMD_ADMIN_PAUSE_MATCH:
+						{
+							gMatchPause.Init(Player, UNASSIGNED);
+							return true;
+						}
+						case CMD_ADMIN_HELP:
+						{
+							gMatchBot.Help(Player, true);
+							return true;
+						}
+						case CMD_ADMIN_PLAYER_LIST:
+						{
+							gMatchPlayer.PlayerMenu(Player);
+							return true;
+						}
+						case CMD_ADMIN_CVAR_MENU:
+						{
+							gMatchCvarMenu.Menu(Player);
+							return true;
+						}
+					}
 				}
-			}
-
-			// Switch of command index
-			switch (Command->second.Index)
-			{
-				case CMD_PLAYER_STATUS:
-				{
-					gMatchBot.Status(Player);
-					return true;
-				}
-				case CMD_PLAYER_SCORE:
-				{
-					gMatchBot.Scores(Player, false);
-					return true;
-				}
-				case CMD_PLAYER_READY:
-				{
-					gMatchReady.Ready(Player);
-					return true;
-				}
-				case CMD_PLAYER_NOTREADY:
-				{
-					gMatchReady.NotReady(Player);
-					return true;
-				}
-				case CMD_PLAYER_HP:
-				{
-					gMatchRound.ShowHP(Player, true, false);
-					return true;
-				}
-				case CMD_PLAYER_DMG:
-				{
-					gMatchRound.ShowDamage(Player, true, false);
-					return true;
-				}
-				case CMD_PLAYER_RDMG:
-				{
-					gMatchRound.ShowReceivedDamage(Player, true, false);
-					return true;
-				}
-				case CMD_PLAYER_SUM:
-				{
-					gMatchRound.ShowSummary(Player, true, false);
-					return true;
-				}
-				case CMD_PLAYER_HELP:
-				{
-					gMatchBot.Help(Player, false);
-					return true;
-				}
-				case CMD_PLAYER_VOTE:
-				{
-					gMatchVoteMenu.Menu(Player);
-					return true;
-				}
-				case CMD_PLAYER_VOTE_KICK:
-				{
-					gMatchVoteMenu.VoteKick(Player);
-					return true;
-				}
-				case CMD_PLAYER_VOTE_MAP:
-				{
-					gMatchVoteMenu.VoteMap(Player);
-					return true;
-				}
-				case CMD_PLAYER_VOTE_PAUSE:
-				{
-					gMatchVoteMenu.VotePause(Player);
-					return true;
-				}
-				case CMD_PLAYER_VOTE_RESTART:
-				{
-					gMatchVoteMenu.VoteRestart(Player);
-					return true;
-				}
-				case CMD_PLAYER_VOTE_STOP:
-				{
-					gMatchVoteMenu.VoteStop(Player);
-					return true;
-				}
-				case CMD_PLAYER_MUTE_MENU:
-				{
-					gMatchMute.Menu(Player);
-					return true;
-				}
-				case CMD_PLAYER_VOTE_SURRENDER:
-				{
-					gMatchVoteMenu.VoteSurrender(Player);
-					return true;
-				}
-				case CMD_ADMIN_MENU:
-				{
-					gMatchAdminMenu.MainMenu(Player->entindex());
-					return true;
-				}
-				case CMD_ADMIN_KICK:
-				{
-					gMatchAdminMenu.KickMenu(Player->entindex());
-					return true;
-				}
-				case CMD_ADMIN_BAN:
-				{
-					gMatchAdminMenu.BanMenu(Player->entindex());
-					return true;
-				}
-				case CMD_ADMIN_KILL:
-				{
-					gMatchAdminMenu.SlayMenu(Player->entindex());
-					return true;
-				}
-				case CMD_ADMIN_TEAM:
-				{
-					gMatchAdminMenu.TeamMenu(Player->entindex());
-					return true;
-				}
-				case CMD_ADMIN_MAP:
-				{
-					gMatchAdminMenu.MapMenu(Player->entindex());
-					return true;
-				}
-				case CMD_ADMIN_CONTROL:
-				{
-					gMatchAdminMenu.ControlMenu(Player->entindex());
-					return true;
-				}
-				case CMD_ADMIN_MESSAGE:
-				{
-					gMatchAdminMenu.Message(Player);
-					return true;
-				}
-				case CMD_ADMIN_COMMAND:
-				{
-					gMatchAdminMenu.Rcon(Player);
-					return true;
-				}
-				case CMD_ADMIN_SWAP:
-				{
-					gMatchAdminMenu.SwapTeams(Player->entindex());
-					return true;
-				}
-				case CMD_ADMIN_VOTE_MAP:
-				{
-					gMatchBot.StartVoteMap(Player);
-					return true;
-				}
-				case CMD_ADMIN_VOTE_TEAM:
-				{
-					gMatchBot.StartVoteTeam(Player);
-					return true;
-				}
-				case CMD_ADMIN_START_MATCH:
-				{
-					gMatchBot.StartMatch(Player);
-					return true;
-				}
-				case CMD_ADMIN_STOP_MATCH:
-				{
-					gMatchBot.StopMatch(Player);
-					return true;
-				}
-				case CMD_ADMIN_RESTART_MATCH:
-				{
-					gMatchBot.RestartMatch(Player);
-					return true;
-				}
-				case CMD_ADMIN_PAUSE_MATCH:
-				{
-					gMatchPause.Init(Player, UNASSIGNED);
-					return true;
-				}
-				case CMD_ADMIN_HELP:
-				{
-					gMatchBot.Help(Player, true);
-					return true;
-				}
-				case CMD_ADMIN_PLAYER_LIST:
-				{
-					gMatchPlayer.PlayerMenu(Player);
-					return true;
-				}
-				case CMD_ADMIN_CVAR_MENU:
-				{
-					gMatchCvarMenu.Menu(Player);
-					return true;
-				}
+				
+				// Block the message from showing in chat
+				return true;
 			}
 		}
 	}
+	// Remove the else block completely - no console commands
 
 	// Allow in chat
 	return false;
