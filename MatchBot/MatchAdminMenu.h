@@ -32,10 +32,10 @@ public:
 	static void ControlMenuHandle(int EntityIndex, P_MENU_ITEM Item);
 
 	// Send global message
-	bool Message(CBasePlayer* Player);
+	bool Message(CBasePlayer* Player, const char* args = nullptr);
 
 	// Send rcon command
-	bool Rcon(CBasePlayer* Player);
+	bool Rcon(CBasePlayer* Player, const char* args = nullptr);
 
 	// Swap teams
 	void SwapTeams(int EntityIndex);
