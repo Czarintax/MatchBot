@@ -350,7 +350,7 @@ void CMatchAdminMenu::TeamMenu(int EntityIndex)
 		{
 			if (Player->m_iTeam != UNASSIGNED)
 			{
-				gMatchMenu[EntityIndex].AddItem(Player->entindex(), gMatchUtil.FormatString("%s \\R\\y%s", STRING(Player->edict()->v.netname), gMatchBot.GetTeam(Player->m_iTeam, true)), false, (int)UNASSIGNED);
+				gMatchMenu[EntityIndex].AddItem(Player->entindex(), gMatchUtil.FormatString("%s \\y\\R%s", STRING(Player->edict()->v.netname), gMatchBot.GetTeam(Player->m_iTeam, true)), false, (int)UNASSIGNED);
 			}
 		}
 	}
