@@ -572,22 +572,43 @@ bool CMatchAdminMenu::Message(CBasePlayer* Player)
 
 			if (!Args.empty() && Args.length() > 2)
 			{
+				// Remove quotes
 				Args.erase(std::remove(Args.begin(), Args.end(), '\"'), Args.end());
+				
+				// Remove the /msg prefix if present
+				if (Args[0u] == '/')
+				{
+					// Find first space after command
+					size_t spacePos = Args.find(' ');
+					if (spacePos != std::string::npos)
+					{
+						// Extract everything after the space
+						Args = Args.substr(spacePos + 1);
+					}
+					else
+					{
+						// No message text provided
+						Args.clear();
+					}
+				}
 
-				gMatchUtil.SayText(nullptr, Player->entindex(), _T("^3(%s)^1: %s"), STRING(Player->edict()->v.netname), Args.c_str());
+				if (!Args.empty())
+				{
+					gMatchUtil.SayText(nullptr, Player->entindex(), _T("^3(%s)^1: %s"), STRING(Player->edict()->v.netname), Args.c_str());
 
-				gpMetaUtilFuncs->pfnLogMessage
-				(
-					&Plugin_info,
-					"\"%s<%i><%s><%s>\" message: %s",
-					STRING(Player->edict()->v.netname),
-					g_engfuncs.pfnGetPlayerUserId(Player->edict()),
-					g_engfuncs.pfnGetPlayerAuthId(Player->edict()),
-					gMatchBot.GetTeam(Player->m_iTeam, true),
-					Args.c_str()
-				);
+					gpMetaUtilFuncs->pfnLogMessage
+					(
+						&Plugin_info,
+						"\"%s<%i><%s><%s>\" message: %s",
+						STRING(Player->edict()->v.netname),
+						g_engfuncs.pfnGetPlayerUserId(Player->edict()),
+						g_engfuncs.pfnGetPlayerAuthId(Player->edict()),
+						gMatchBot.GetTeam(Player->m_iTeam, true),
+						Args.c_str()
+					);
 
-				return true;
+					return true;
+				}
 			}
 		}
 	}
@@ -613,37 +634,52 @@ bool CMatchAdminMenu::Rcon(CBasePlayer* Player)
 
 			std::string Args = pCmdArgs;
 
-			if (Args.find("rcon_password") != std::string::npos || Args.find("sv_password") != std::string::npos)
-			{
-				gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("These commands are protected here, only ^3Server^1 can use."));
-				return false;
-			}
-
 			if (!Args.empty() && Args.length() > 2)
 			{
+				// Remove quotes
 				Args.erase(std::remove(Args.begin(), Args.end(), '\"'), Args.end());
+				
+				// Remove the /cmd prefix if present
+				if (Args[0u] == '/')
+				{
+					// Find first space after command
+					size_t spacePos = Args.find(' ');
+					if (spacePos != std::string::npos)
+					{
+						// Extract everything after the space
+						Args = Args.substr(spacePos + 1);
+					}
+					else
+					{
+						// No command provided
+						Args.clear();
+					}
+				}
 
-				gMatchUtil.ServerCommand(Args.c_str());
+				if (!Args.empty())
+				{
+					gMatchUtil.ServerCommand(Args.c_str());
 
-				gMatchUtil.SayText(Player->edict(), Player->entindex(), _T("^3Executed^1: %s"), Args.c_str());
+					gpMetaUtilFuncs->pfnLogMessage
+					(
+						&Plugin_info,
+						"\"%s<%i><%s><%s>\" server command: %s",
+						STRING(Player->edict()->v.netname),
+						g_engfuncs.pfnGetPlayerUserId(Player->edict()),
+						g_engfuncs.pfnGetPlayerAuthId(Player->edict()),
+						gMatchBot.GetTeam(Player->m_iTeam, true),
+						Args.c_str()
+					);
 
-				gpMetaUtilFuncs->pfnLogMessage
-				(
-					&Plugin_info,
-					"\"%s<%i><%s><%s>\" server command: %s",
-					STRING(Player->edict()->v.netname),
-					g_engfuncs.pfnGetPlayerUserId(Player->edict()),
-					g_engfuncs.pfnGetPlayerAuthId(Player->edict()),
-					gMatchBot.GetTeam(Player->m_iTeam, true),
-					Args.c_str()
-				);
+					gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Command ^3%s^1 executed."), Args.c_str());
 
-				return true;
+					return true;
+				}
 			}
 		}
 	}
 
-	gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Usage: /cmd ^3<Server Command>^1"));
+	gMatchUtil.SayText(Player->edict(), PRINT_TEAM_DEFAULT, _T("Usage: /cmd ^3<Command>^1"));
 
 	return false;
 }
