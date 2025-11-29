@@ -257,7 +257,7 @@ int CMatchUtil::GetCount(TeamName Team)
 
 		if (Player)
 		{
-			if (!Player->IsDormant() && (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot()))
+			if (!Player->IsDormant() && !(Player->edict()->v.flags & FL_FAKECLIENT))
 			{
 				if (Player->m_iTeam == Team)
 				{
@@ -280,7 +280,7 @@ std::array<int, SPECTATOR + 1U> CMatchUtil::GetCount()
 
 		if (Player)
 		{
-			if (!Player->IsDormant() && (!(Player->edict()->v.flags & FL_FAKECLIENT) || !Player->IsBot()))
+			if (!Player->IsDormant() && !(Player->edict()->v.flags & FL_FAKECLIENT))
 			{
 				TeamCount[Player->m_iTeam]++;
 			}
